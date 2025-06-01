@@ -2,8 +2,11 @@ const submitButton = document.getElementById('submitBtn');
 submitButton.addEventListener("click", submitFeedback);
 
 const welcomeText = document.getElementById("welcome");
-welcomeText.addEventListener("mousemove", function() {
+welcomeText.addEventListener("mouseenter", function() {
     welcomeText.style.color = "red";
+});
+welcomeText.addEventListener("mouseleave", function() {
+    welcomeText.style.color = "black";
 });
 
 document.addEventListener("keydown", function(event) {
