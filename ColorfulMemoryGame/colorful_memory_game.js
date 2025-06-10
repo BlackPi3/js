@@ -10,6 +10,8 @@ const gameContainer = document.getElementById('game-container');
 const scoreElement = document.getElementById('score');
 const timerElement = document.getElementById('timer');
 
+startbtn.addEventListener('click', startGame);
+
 function generateCards() {
     for (const c of cards) {
         const card = document.createElement("div");
@@ -36,14 +38,16 @@ function handleCardClick(event) {
     }
     card.textContent = card.dataset.color;
     card.style.backgroundColor = card.dataset.color;
-    selectedCards.push(card);
+    if (!selectedCards.includes(card)) selectedCards.push(card);
     if (selectedCards.length == 2) {
         setTimeout(checkMatch, 500);
     }
 }
 
 function checkMatch() {
-    const [card1, card2] = selectedCards;
+    const card2 = selectedCards.pop();
+    const card1 = selectedCards.pop();
+
     if (card1.dataset.color === card2.dataset.color) {
         card1.classList.add('matched');
         card2.classList.add('matched');
@@ -55,7 +59,6 @@ function checkMatch() {
         card1.style.backgroundColor = '#ddd';
         card2.style.backgroundColor = '#ddd';
     }
-    selectedCards = [];
 }
 
 function startGame() {
@@ -64,7 +67,6 @@ function startGame() {
     score = 0; // Reset score to zero
     scoreElement.textContent = `Score: ${score}`;
     startGameTimer(timeLeft);
-    cards = shuffle(colors.concat(colors));
     selectedCards = [];
     gameContainer.innerHTML = '';
     generateCards();
@@ -72,18 +74,15 @@ function startGame() {
 }
 
 function startGameTimer(timeLeft) {
-    timerElement.textContent = `Time Left: ${timeLeft}`;
-    gameInterval = setInterval(() => {
+    timerElement.textContent = `Time remaining: ${timeLeft}`;
+    timer = setInterval(() => {
         timeLeft--;
-        timerElement.textContent = `Time Left: ${timeLeft}`;
+        timerElement.textContent = `Time remaining: ${timeLeft}`;
 
-        if (timeLeft === 0) {
-            clearInterval(gameInterval);
-            let timeLeft = 30;
-            alert('Game Over!');
+        if (timeLeft == 0) {
+            clearInterval(timer);
+            window.alert("Game over");
             startbtn.disabled = false;
         }
     }, 1000);
 }
-
-startbtn.addEventListener('click', startGame);
